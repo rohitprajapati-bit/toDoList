@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:to_do_list/screen/viewTask.dart';
 
 class Addtaskpage extends StatefulWidget {
   const Addtaskpage({super.key});
@@ -9,23 +8,25 @@ class Addtaskpage extends StatefulWidget {
 }
 
 class _AddtaskpageState extends State<Addtaskpage> {
-  final List<Map<String, String>> _todoItems = [];
   final TextEditingController titleController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
 
-  void _addTodoTask(String title, String description) {
+  void _saveTask() {
+    String title = titleController.text;
+    String description = descriptionController.text;
+
     if (title.isNotEmpty && description.isNotEmpty) {
-      setState(() {
-        _todoItems.add({'title ': title, 'description': description});
-      });
+      Navigator.pop(context, {'title': title, 'description': description});
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey.shade200,
-      appBar: AppBar(),
+      appBar: AppBar(
+        backgroundColor: Colors.grey.shade200,
+        title: const Text('Add Task'),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(10),
         child: Column(
@@ -37,7 +38,7 @@ class _AddtaskpageState extends State<Addtaskpage> {
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(20))),
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             TextField(
@@ -47,13 +48,13 @@ class _AddtaskpageState extends State<Addtaskpage> {
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(20))),
             ),
-            SizedBox(
+            const SizedBox(
               height: 30,
             ),
             GestureDetector(
               child: Container(
-                padding: EdgeInsets.all(10),
-                child: Center(
+                padding: const EdgeInsets.all(10),
+                child: const Center(
                     child: Text(
                   'Save',
                   style: TextStyle(fontSize: 19, fontWeight: FontWeight.bold),
@@ -61,16 +62,8 @@ class _AddtaskpageState extends State<Addtaskpage> {
                 width: double.infinity,
                 color: Colors.blue,
               ),
-              onTap: () {
-                _addTodoTask(titleController.text, descriptionController.text);
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => Viewtask(
-                            title: titleController.text,
-                            description: descriptionController.text)));
-              },
-            )
+              onTap: _saveTask,
+            ),
           ],
         ),
       ),
